@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV Alert Forwarder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app__header">
+      <div>
+        <p class="eyebrow">TradingView alerts → Webhook</p>
+        <h1>TV Alert Forwarder</h1>
+      </div>
+      <button class="ghost" id="logoutBtn" title="Logout">
+        <span>Logout</span>
+      </button>
+    </header>
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="dashboard" role="tab">Dashboard</button>
+      <button class="tab" data-tab="settings" role="tab">Settings</button>
+      <button class="tab" data-tab="logs" role="tab">Logs</button>
+    </div>
+
+    <section id="login-screen" class="card hidden">
+      <h2 class="card__title">Enter PIN</h2>
+      <p class="muted" id="loginSubtitle">Set a 6-digit PIN to unlock the extension.</p>
+      <form id="loginForm" class="stack">
+        <input type="password" inputmode="numeric" maxlength="6" minlength="6" pattern="\d{6}" id="pinInput" placeholder="123456" required>
+        <input type="password" inputmode="numeric" maxlength="6" minlength="6" pattern="\d{6}" id="pinConfirm" placeholder="Confirm PIN" class="hidden" required>
+        <button type="submit" class="primary" id="loginSubmit">Set PIN</button>
+      </form>
+      <p class="error" id="loginError"></p>
+    </section>
+
+    <section id="dashboard" class="card tabpanel active" role="tabpanel">
+      <div class="status-row">
+        <div>
+          <p class="muted">Status</p>
+          <h2 id="statusLabel" class="status-pill status-pill--disabled">Disabled</h2>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="enabledToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="info-row">
+        <p class="muted">Webhook</p>
+        <p id="webhookDisplay" class="mono">Not set</p>
+      </div>
+      <div class="stack">
+        <label for="customMessage" class="muted">Send custom message</label>
+        <textarea id="customMessage" rows="2" placeholder="BUY BTCUSDT 1H breakout"></textarea>
+        <div class="btn-row">
+          <button class="ghost" id="sendCustom">Send Custom</button>
+          <button class="primary" id="testWebhook">Test Webhook</button>
+        </div>
+        <p class="muted">Sends JSON: { alert, timestamp, symbol, test }</p>
+      </div>
+      <p class="error" id="dashboardError"></p>
+      <p class="success" id="dashboardSuccess"></p>
+    </section>
+
+    <section id="settings" class="card tabpanel" role="tabpanel">
+      <form id="webhookForm" class="stack">
+        <label for="webhookUrl">Webhook URL (HTTPS)</label>
+        <input type="url" id="webhookUrl" placeholder="https://example.com/webhook" required>
+        <button type="submit" class="primary">Save Webhook</button>
+      </form>
+
+      <div class="divider"></div>
+
+      <form id="pinForm" class="stack">
+        <h3>Change PIN</h3>
+        <input type="password" id="currentPin" placeholder="Current PIN" inputmode="numeric" pattern="\d{6}" maxlength="6" minlength="6" required>
+        <input type="password" id="newPin" placeholder="New 6-digit PIN" inputmode="numeric" pattern="\d{6}" maxlength="6" minlength="6" required>
+        <input type="password" id="confirmNewPin" placeholder="Confirm new PIN" inputmode="numeric" pattern="\d{6}" maxlength="6" minlength="6" required>
+        <button type="submit" class="ghost">Update PIN</button>
+        <p class="muted">PIN stays local and is hashed before storage.</p>
+      </form>
+      <p class="error" id="settingsError"></p>
+      <p class="success" id="settingsSuccess"></p>
+    </section>
+
+    <section id="logs" class="card tabpanel" role="tabpanel">
+      <div class="logs__header">
+        <h3>Recent Attempts</h3>
+        <button class="ghost" id="clearLogs">Clear</button>
+      </div>
+      <div id="logList" class="logs"></div>
+    </section>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
